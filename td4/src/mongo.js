@@ -1,6 +1,9 @@
 const DABASE_NAME = 'M2WEB'
 const collection  = 'contacts'
-const MONGO_URL = 'mongodb://localhost:27017';
+
+process.loadEnvFile('./.env');
+
+const MONGO_URL = process.env.MONGO_DB;
 
 import { MongoClient } from 'mongodb';
 
