@@ -10,6 +10,15 @@ router.get('/', function (req, res) {
     });
 });
 
+/**
+ * @openapi
+ * /contacts:
+ *   get:
+ *     description: All contacts
+ *     responses:
+ *       '200':
+ *         description: Returns all the contacts
+ */
 router.route('/contacts').get(async (req, res) => {
     let response = await getAllContacts();
     if (response.success == true) {
