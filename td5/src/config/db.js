@@ -1,6 +1,6 @@
 import { connect, disconnect } from 'mongoose';
 
-process.loadEnvFile()
+process.loadEnvFile('./.env');
       
 async function connectDB() {
     try {
