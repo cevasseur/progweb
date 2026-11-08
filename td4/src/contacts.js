@@ -54,8 +54,7 @@ async function main() {
 
         app.get('/api/contacts/:id', async (req, res) => {
             try {
-                const id = req.params.id;
-                const contact = await contacts.findOne({ _id: new ObjectId(id) });
+                const contact = await contacts.findOne({ _id: new ObjectId(req.params.id) });
                 if (!contact) {
                     return res.status(404).json({ error: 'Contact introuvable' });
                 }
@@ -67,8 +66,7 @@ async function main() {
 
         app.post('/api/contacts', async (req, res) => {
             try {
-                const newContact = req.body; // Récupère les données envoyées en JSON
-                const result = await contacts.insertOne(newContact);
+                const result = await contacts.insertOne(req.body);
                 
                 // Récupérer le contact tout juste créé pour le renvoyer
                 const createdContact = await contacts.findOne({ _id: result.insertedId });
@@ -81,11 +79,10 @@ async function main() {
         app.put('/api/contacts/:id', async (req, res) => {
             try {
                 const id = req.params.id;
-                const updatedData = req.body;
 
                 await contacts.updateOne(
                     { _id: new ObjectId(id) },
-                    { $set: updatedData }
+                    { $set: req.body }
                 );
 
                 const updatedContact = await contacts.findOne({ _id: new ObjectId(id) });
@@ -114,7 +111,7 @@ async function main() {
 
         await printAllContacts(contacts);
 
-        app.use(function(req, res){
+        app.use(function(req, res) {
             res.status(404).send('Page introuvable !');
         });
 
