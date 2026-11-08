@@ -1,2 +1,31 @@
 ### Default URL
 GET http://localhost:8080/
+
+### Display Json table
+GET http://localhost:8080/api/contacts
+
+### Display a contact with its id
+GET http://localhost:8080/api/contacts/6af07fbdd4509d952f202b87
+
+### Add a new contact
+POST http://localhost:8080/api/contacts
+Content-Type: application/json
+
+{
+  "name": "Marie",
+  "age": 24
+}
+
+###
+
+### Update a contact
+PUT http://localhost:8080/api/contacts/6af0856c381cf89ea83b9549
+Content-Type: application/json
+
+{
+  "age": 25
+}
+###
+
+### Delete a contact
+DELETE http://localhost:8080/api/contacts/6af07fbdd4509d952f202b87
