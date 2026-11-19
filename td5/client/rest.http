@@ -32,4 +32,48 @@ Content-Type: application/json
 ###
 
 ### Delete a contact
-DELETE http://localhost:5000/api/contacts/6af0b7344f942d8b29828b86
+DELETE http://localhost:5000/api/contacts/6afec3c55d8d071be41e64e8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWZlYzIyZDE1YjZiNDFiNjJjY2Q4NDEiLCJlbWFpbCI6ImNlbmdpekBleGFtcGxlLmNvbSIsImlhdCI6MTc5NTA4MTEzOCwiZXhwIjoxNzk1MDg0NzM4fQ.xXBVxweJMCWAyZsJdufsvBDgNCiknEPToZP1I2bNTM8
+
+### Register a new user 
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "cengiz@example.com",
+  "password": "mdpSecure33!"
+}
+
+###
+
+### Connect to obtain the JWT
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "cengiz@example.com",
+  "password": "mdpSecure33!"
+}
+
+###
+
+### Contacts list with protected access
+GET http://localhost:5000/api/contacts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWZlYzIyZDE1YjZiNDFiNjJjY2Q4NDEiLCJlbWFpbCI6ImNlbmdpekBleGFtcGxlLmNvbSIsImlhdCI6MTc5NTA4MTEzOCwiZXhwIjoxNzk1MDg0NzM4fQ.xXBVxweJMCWAyZsJdufsvBDgNCiknEPToZP1I2bNTM8
+
+###
+
+### Create contact with protected access
+POST http://localhost:5000/api/contacts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWZlYzIyZDE1YjZiNDFiNjJjY2Q4NDEiLCJlbWFpbCI6ImNlbmdpekBleGFtcGxlLmNvbSIsImlhdCI6MTc5NTA4MTEzOCwiZXhwIjoxNzk1MDg0NzM4fQ.xXBVxweJMCWAyZsJdufsvBDgNCiknEPToZP1I2bNTM8
+
+{
+  "name": "Bob",
+  "age": 29
+}
+
+###
+
+### Error test 401, no token request
+GET http://localhost:5000/api/contacts

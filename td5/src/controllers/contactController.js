@@ -38,7 +38,6 @@ export async function addContact(body) {
         return {
           success: true,
           data: contact,
-          total: (1).toString(),
         }
     } catch (err) {
       return { success: false, message: "Contact not created " + err };
@@ -63,7 +62,6 @@ export async function updateContact(id, name = null, age = null) {
       return {
         success: true,
         data: contact,
-        total: (1).toString(),
       }
     } catch (err) {
       return { success: false, message: "Contact not updated " + err };
@@ -81,7 +79,6 @@ export async function removeContact(id) {
       return {
         success: true,
         data: result,
-        total: result.deletedCount.toString(),
       };
     } catch (err) {
       return { success: false, message: "Contact not deleted " + err };

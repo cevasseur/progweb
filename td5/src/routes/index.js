@@ -1,7 +1,21 @@
 import { Router } from 'express';
+import { requireAuth } from '../middleware/authMiddleware.js';
 import { getAllContacts, getContactById, updateContact, removeContact, addContact } from '../controllers/contactController.js';
+import { registerUser, loginUser } from '../controllers/authController.js';
 
 const router = Router();
+
+// router.use('/contacts', requireAuth); // Permet de retirer requireAuth dans toutes les routes qui ont '/contacts'
+
+router.route('/auth/register').post(async (req, res) => {
+    const response = await registerUser(req.body);
+    res.status(response.success ? 201:400).json(response);
+});
+
+router.route('/auth/login').post(async (req, res) => {
+    const response = await loginUser(req.body);
+    res.status(response.success ? 200:401).json(response);
+});
 
 router.get('/', function (req, res) {
     res.status(200).json({
@@ -10,47 +24,25 @@ router.get('/', function (req, res) {
     });
 });
 
-/**
- * @openapi
- * /contacts:
- *   get:
- *     description: All contacts
- *     responses:
- *       '200':
- *         description: Returns all the contacts
- */
-router.route('/contacts').get(async (req, res) => {
+router.route('/contacts').get(requireAuth, async (req, res) => {
     let response = await getAllContacts();
-    if (response.success == true) {
-        res.status(200).json(response);
-    } else {
-        res.status(404).json(response);
-    }
+    res.status(response.success ? 200:404).json(response);
+}).post(requireAuth, async (req, res) => {
+    let response = await addContact(req.body);
+    res.status(response.success ? 201:500).json(response);
 });
 
-router.route('/contacts/:id').get(async (req, res) => {
-    const id = req.params.id;
-    let response = await getContactById(id);
+router.route('/contacts/:id').get(requireAuth, async (req, res) => {
+    let response = await getContactById(req.params.id);
     res.status(response.success == true ? 200:404).json(response);
-});
-
-router.route('/contacts').post(async (req, res) => {
-    const body = req.body;
-    let response = await addContact(body);
-    res.status(response.success == true ? 201:500).json(response);
-});
-
-router.route('/contacts/:id').put(async (req, res) => {
+}).put(requireAuth, async (req, res) => {
     const id = req.params.id;
-    const body = req.body;
-    let response = await updateContact(id, body.name, body.age);
-    res.status(response.success == true ? 200:400).json(response);
-});
-
-router.route('/contacts/:id').delete(async (req, res) => {
-    const id = req.params.id;
-    let response = await removeContact(id);
-    res.status(response.success == true ? 200:404).json(response);
+    const { name, age } = req.body;
+    let response = await updateContact(id, name, age);
+    res.status(response.success ? 200:400).json(response);
+}).delete(requireAuth, async (req, res) => {
+    let response = await removeContact(req.params.id);
+    res.status(response.success ? 200:404).json(response);
 });
 
 export default router;
