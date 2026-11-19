@@ -1,0 +1,7 @@
+# Exemple minimal
+node_modules
+.git
+dockertest.txt
+.env
+.vscode
+.gitignore

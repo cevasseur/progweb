@@ -1,0 +1,92 @@
+### Création d’une application minimaliste
+# Construisons notre première image
+docker build -t web .
+
+# Fichiers parasites
+docker images
+"web" :
+    id -> 350fda77ff96
+    disk usage -> 254MB
+    size -> 60.5MB
+
+docker build - web .
+docker images
+"web" :
+    id -> b18174a83cfb
+    disk usage -> 249MB
+    size -> 59.8MB
+
+# Lancement de notre conteneur
+docker run -d -p 8090:80 web
+>> 093cf3d4424534e12320d0ec95db6c21633254c576d028b19e50c3b2bfe4edbe
+
+docker ps
+    ID -> 093cf3d44245
+    Ports -> 0.0.0.0:8090->80/tcp
+
+docker stop 093cf3d44245
+
+### Modification de l’application
+# Partager votre application / Solution 1
+docker pull alpine
+docker images 
+    alpine:latest
+    web:latest
+
+docker run -it --rm alpine /bin/sh
+docker images
+    alpine:latest
+    web:latest
+docker image rm alpine
+docker images
+    web:latest
+
+# Gestion des données
+docker exec -it web /bin/sh
+Error response from daemon: No such container: web
+docker exec -it b18174a83cfb /bin/sh
+Error response from daemon: No such container: b18174a83cfb
+docker run -it web /bin/sh
+/app # apk update && apk add vim
+
+docker run -d -p 8090:80 -v "$(pwd)/src:/td6/src" web
+
+# Volumes
+docker volume create
+2989f0ce21d42aee932fc02c60bea769f2370fa7ce3429cc43c802c57e53b29a
+docker volume ls
+DRIVER    VOLUME NAME
+local     2989f0ce21d42aee932fc02c60bea769f2370fa7ce3429cc43c802c57e53b29a
+docker volume create test
+test
+docker volume ls
+DRIVER    VOLUME NAME
+local     2989f0ce21d42aee932fc02c60bea769f2370fa7ce3429cc43c802c57e53b29a
+local     test
+docker volume rm test
+test
+
+docker run --rm -v test:/data web sh -c 'echo "test_data" > /data/notes.txt'
+
+docker volume inspect test
+[
+    {
+        "CreatedAt": "2026-11-19T10:47:51Z",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/test/_data",
+        "Name": "test",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+
+docker container ls
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                  NAMES
+125ab7c5a332   web       "docker-entrypoint.s…"   24 minutes ago   Up 24 minutes   0.0.0.0:8090->80/tcp   vibrant_dhawan
+docker run -v test:/vibrant_dhawan web
+
+> td6@1.0.0 start
+> node --watch src/index.js
+
+Server is running on port 80
